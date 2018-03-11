@@ -1,10 +1,8 @@
 package grails.plugin.formfields
 
-import grails.core.support.proxy.DefaultProxyHandler
 import grails.plugin.formfields.mock.Person
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import org.grails.validation.DefaultConstraintEvaluator
 import org.grails.web.gsp.io.GrailsConventionGroovyPageLocator
 import org.grails.gsp.io.GroovyPageResourceScriptSource
 import org.springframework.core.io.ByteArrayResource

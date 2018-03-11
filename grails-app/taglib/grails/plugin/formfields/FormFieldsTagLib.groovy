@@ -33,7 +33,6 @@ import org.grails.datastore.mapping.model.types.OneToMany
 import org.grails.datastore.mapping.model.types.OneToOne
 import org.grails.gsp.GroovyPage
 import org.grails.scaffolding.model.DomainModelService
-import org.grails.scaffolding.model.DomainModelServiceImpl
 import org.grails.scaffolding.model.property.Constrained
 import org.grails.scaffolding.model.property.DomainPropertyFactory
 import org.grails.web.servlet.mvc.GrailsWebRequest
@@ -506,12 +505,12 @@ class FormFieldsTagLib {
 		return properties
 	}
 
-	private static List<String> getList(def except, List<String> defaultList = []) {
-		if(!except) {
-			return defaultList
-		} else if(except instanceof String) {
+	private static List<String> getList(def except) {
+		if (!except) {
+			return []
+		} else if (except instanceof String) {
 			except?.tokenize(',')*.trim()
-		} else if(except instanceof Collection) {
+		} else if (except instanceof Collection) {
 			return except as List<String>
 		} else {
 			throw new IllegalArgumentException("Must either be null, comma separated string or java.util.Collection")
@@ -578,26 +577,11 @@ class FormFieldsTagLib {
 		if (model.invalid) attrs.invalid = ""
 		if (!isEditable(constrained)) attrs.readonly = ""
 
-		boolean oneToOne = false
-		boolean manyToOne = false
-		boolean manyToMany = false
-		boolean oneToMany = false
-		if (model.containsKey('persistentProperty')) {
-			if (model.persistentProperty instanceof GrailsDomainClassProperty) {
-				log.warn("Rendering an input with a GrailsDomainClassProperty is deprecated. Use a PersistentProperty instead.")
-				GrailsDomainClassProperty gdcp = (GrailsDomainClassProperty) model.persistentProperty
-				oneToOne = gdcp.oneToOne
-				manyToOne = gdcp.manyToOne
-				manyToMany = gdcp.manyToMany
-				oneToMany = gdcp.oneToMany
-			} else if (model.persistentProperty instanceof PersistentProperty) {
-				PersistentProperty prop = (PersistentProperty) model.persistentProperty
-				oneToOne = prop instanceof OneToOne
-				manyToOne = prop instanceof ManyToOne
-				manyToMany = prop instanceof ManyToMany
-				oneToMany = prop instanceof OneToMany
-			}
-		}
+		def persistentProperty = model.persistentProperty
+		boolean oneToOne = AssociationResolver.isOneToOne(persistentProperty)
+		boolean manyToOne = AssociationResolver.isManyToOne(persistentProperty)
+		boolean manyToMany = AssociationResolver.isManyToMany(persistentProperty)
+		boolean oneToMany = AssociationResolver.isOneToMany(persistentProperty)
 
 		if (model.type in [String, null]) {
 			return renderStringInput(model, attrs)

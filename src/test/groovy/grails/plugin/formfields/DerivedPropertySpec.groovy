@@ -3,7 +3,6 @@ package grails.plugin.formfields
 import grails.plugin.formfields.mock.Product
 import grails.plugin.formfields.taglib.AbstractFormFieldsTagLibSpec
 import grails.test.mixin.*
-import org.grails.datastore.mapping.config.Property
 import org.grails.datastore.mapping.model.MappingContext
 import spock.lang.*
 

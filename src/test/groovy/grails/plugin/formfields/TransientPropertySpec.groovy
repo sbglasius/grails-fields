@@ -1,6 +1,5 @@
 package grails.plugin.formfields
 
-import grails.plugin.formfields.mock.Product
 import grails.plugin.formfields.taglib.AbstractFormFieldsTagLibSpec
 import spock.lang.Issue
 import grails.test.mixin.*
